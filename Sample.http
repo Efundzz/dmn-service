@@ -1,0 +1,8 @@
+POST http://localhost:8080/evaluate
+Content-Type: application/json
+
+
+{
+    "Age": 10,
+    "decisionKey": "decision"
+}
