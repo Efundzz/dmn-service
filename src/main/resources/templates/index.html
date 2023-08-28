@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>DMN Service</title>
+    <script>
+        async function evaluateDecision() {
+            const inputVariables = document.getElementById('inputVariables').value;
+            const response = await fetch('/evaluate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'applicatio vcg n/json'
+                },
+                body: inputVariables
+            });
+            document.getElementById('decisionResult').innerText = await response.text();
+        }
+    </script>
+</head>
+<body>
+<h1>DMN Service</h1>
+<label for="inputVariables">Input Variables (JSON):</label><br>
+<textarea id="inputVariables" rows="4" cols="50"></textarea><br><br>
+<button onclick="evaluateDecision()">Submit</button>
+<br><br>
+<h2>Decision Result:</h2>
+<p id="decisionResult"></p>
+</body>
+</html>
