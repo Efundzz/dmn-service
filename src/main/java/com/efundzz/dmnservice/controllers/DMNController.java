@@ -1,23 +1,42 @@
 package com.efundzz.dmnservice.controllers;
 
-import com.efundzz.dmnservice.services.DMNService;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.efundzz.dmnservice.Exception.ValidationException;
+import com.efundzz.dmnservice.services.DMNService;
+
 @RestController
+@CrossOrigin
 public class DMNController {
 
     @Autowired
-    private DMNService dmnService;
-
+    DMNService dmnService;
 
     @PostMapping("/evaluate")
-    public ResponseEntity<String> evaluateDecision(@RequestBody Map<String, Object> inputVariables) {
-        String decisionResult = dmnService.evaluateDecision(inputVariables);
-        return ResponseEntity.ok(decisionResult);
+    public ResponseEntity<?> evaluateDecision(@RequestBody Map<String, Object> inputVariables) {
+        try {
+            List<String> decisionResult = dmnService.evaluateDecision(inputVariables);
+            if(decisionResult.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }else {
+                return ResponseEntity.ok(decisionResult);
+            }
+        } catch (ValidationException ex) {
+            // If validation fails return a structured error response
+            Map<String, String> fieldErrors = ex.getFieldErrors();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(fieldErrors);
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 }
