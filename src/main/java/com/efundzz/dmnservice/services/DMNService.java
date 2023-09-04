@@ -16,7 +16,7 @@ public class DMNService {
 
         inputVariables.remove("decisionKey");
 
-        // TODO: Validate input variables
+
 
         return dmnEvaluator.evaluateDecision(decisionKey, inputVariables);
     }
