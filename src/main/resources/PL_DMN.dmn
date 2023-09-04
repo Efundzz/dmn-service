@@ -1,0 +1,622 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/2.0" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="Decisioning" name="Decisioning" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.12.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.19.0">
+  <decision id="PL_Decisioning" name="Personal Loan Decisioning">
+    <decisionTable id="DecisionTable_1v8jzmz" hitPolicy="RULE ORDER">
+      <input id="Input_1" label="Credit Score" biodi:width="177" camunda:inputVariable="creditScore">
+        <inputExpression id="InputExpression_1" typeRef="string">
+          <text>creditScore</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_1o1vjw1" label="Minimum Salary" biodi:width="158" camunda:inputVariable="takeHomeSalaryMonthly">
+        <inputExpression id="LiteralExpression_033m3xx" typeRef="long">
+          <text>takeHomeSalaryMonthly</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_1xhdmgx" label="Age" biodi:width="150" camunda:inputVariable="age">
+        <inputExpression id="LiteralExpression_1fnv9j8" typeRef="integer">
+          <text>age</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_1t7pgb0" label="Experience" biodi:width="150" camunda:inputVariable="experience">
+        <inputExpression id="LiteralExpression_1s2coak" typeRef="long">
+          <text>experience</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_0ow5rxj" label="Residence Type" biodi:width="257" camunda:inputVariable="residentType">
+        <inputExpression id="LiteralExpression_1wdgakv" typeRef="string">
+          <text>residentType</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_187fdem" label="Amount" biodi:width="161" camunda:inputVariable="loanAmount">
+        <inputExpression id="LiteralExpression_049b6dq" typeRef="long">
+          <text>loanAmount</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_1otpywk" label="FOIR" biodi:width="150" camunda:inputVariable="foir">
+        <inputExpression id="LiteralExpression_1of03pi" typeRef="integer">
+          <text>foir</text>
+        </inputExpression>
+      </input>
+      <output id="Output_1" label="Entity" name="entity" typeRef="string" biodi:width="192" />
+      <rule id="DecisionRule_0268tk5">
+        <inputEntry id="UnaryTests_0ikh98j">
+          <text>["A+", "A", "B", "C", "D", "NH"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0ie1i3y">
+          <text>&gt;=15000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0maqap1">
+          <text>[23..58]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1tqz6zv">
+          <text>&gt;=6</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0hk3pg0">
+          <text>["Owned", "Rented", "Others", "PG or Staying with Friends"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1xod70q">
+          <text>[10000..400000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_070zp2d">
+          <text>&lt;=55</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1ygsme2">
+          <text>"Cashe"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1j0sghi">
+        <inputEntry id="UnaryTests_0v7cb49">
+          <text>["A+", "A", "B", "C", "D", "E", "NH"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_00nnpol">
+          <text>&gt;=12000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0tqsf1o">
+          <text>[21..60]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0x90qbl">
+          <text>&gt;=3</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0gtcudi">
+          <text>["Owned", "Rented", "Others", "PG or Staying with Friends"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_10s0euo">
+          <text>[25000..300000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_05j8eeq">
+          <text>&lt;=60</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0422pxu">
+          <text>"MyShubhLife"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_021qkzp">
+        <inputEntry id="UnaryTests_0dudzin">
+          <text>["A+", "A", "B", "C", "D", "NH" ]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_04s2vq7">
+          <text>&gt;=12000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_10ct1ll">
+          <text>[21..55]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_01my0ee">
+          <text>&gt;=9</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0glj20b">
+          <text>["Owned", "Rented", "Others", "PG or Staying with Friends", "Company Accommodation"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0x96oog">
+          <text>[30000..500000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0vw7u52">
+          <text>&lt;=55</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1xh3sfx">
+          <text>"Werize"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1wqms7j">
+        <inputEntry id="UnaryTests_0h1eaoa">
+          <text>["A+", "A", "B", "C", "NH" ]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_161gwou">
+          <text>&gt;=25000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_093ks3n">
+          <text>[25..58]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_06p7cp2">
+          <text>&gt;=6</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_02shoib">
+          <text>["Owned", "Rented", "Others"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1o7w5k9">
+          <text>[100000..2500000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0b3mvkz">
+          <text>&lt;=65</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0nhz3rt">
+          <text>"IDFC"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_06gc69e">
+        <inputEntry id="UnaryTests_1153ryw">
+          <text>["A+", "A", "B", "C", "NH"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1r4ii67">
+          <text>&gt;=30000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0wqk7y2">
+          <text>[23..58]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0lqrrg3">
+          <text>&gt;=6</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1xrcvu9">
+          <text>["Owned", "Rented", "Others"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_166hod8">
+          <text>[100000..2500000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_16g34oh">
+          <text>&lt;=55</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0j1c3wp">
+          <text>"SBI"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1r4erg1">
+        <inputEntry id="UnaryTests_064b2iu">
+          <text>["A+", "A", "B", "C", "NH"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0jm9jlf">
+          <text>&gt;=30000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1baw028">
+          <text>[23..58]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0gcmdjq">
+          <text>&gt;=6</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1j5c90q">
+          <text>["Owned", "Rented", "Others"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1wuc1u5">
+          <text>[100000..2500000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0zymu9a">
+          <text>&lt;=55</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1j3cf94">
+          <text>"Bank Of Baroda"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0q1wz1u">
+        <inputEntry id="UnaryTests_1gmk6k9">
+          <text>["A+", "A", "B", "NH"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0v22e71">
+          <text>&gt;=30000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1cpc5p0">
+          <text>[21..58]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1vhwhqg">
+          <text>&gt;=24</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0bleayv">
+          <text>["Owned", "Rented", "Others"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0p8ad7l">
+          <text>[100000..2000000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0h86cjg">
+          <text>&lt;=60</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_026t9ob">
+          <text>"Punjab National Bank"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_132rlrk">
+        <inputEntry id="UnaryTests_01z88ei">
+          <text>["A+", "A", "B", "C", "NH"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_06snh0q">
+          <text>&gt;=25000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1plyalb">
+          <text>[23..60]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0oim10w">
+          <text>&gt;=6</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0osg7jq">
+          <text>["Owned", "Rented", "Others"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1eqjema">
+          <text>[100000..2500000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1kex9j6">
+          <text>&lt;=70</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0wcr7ug">
+          <text>"Axis Bank"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1tojx18">
+        <inputEntry id="UnaryTests_1o0qwfp">
+          <text>["A+", "A", "B", "NH"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0tvyt5g">
+          <text>&gt;=20000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0imhf5h">
+          <text>[23..58]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_14e2h1k">
+          <text>&gt;=6</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0v3p1hi">
+          <text>["Owned", "Rented", "Others"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1h0h3ef">
+          <text>[100000..2500000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0m4ke7l">
+          <text>&lt;=70</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1uy38u0">
+          <text>"HDFC"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_14mz6mi">
+        <inputEntry id="UnaryTests_00k2lsn">
+          <text>["A+", "A", "B", "NH"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1y10pkw">
+          <text>&gt;=20000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1yek823">
+          <text>[23..58]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_174h9oe">
+          <text>&gt;=6</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_18ma7a2">
+          <text>["Owned", "Rented", "Others"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1jqnhek">
+          <text>[100000..2500000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1beee3r">
+          <text>&lt;=70</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1n8d0qr">
+          <text>"ICICI"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1knpqcd">
+        <inputEntry id="UnaryTests_1wjpk76">
+          <text>["A+", "A", "B", "C", "NH"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_16kcw7p">
+          <text>&gt;=20000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0oaha0j">
+          <text>[21..60]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_085qd5u">
+          <text>&gt;=6</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1unvvej">
+          <text>["Owned", "Rented", "Others"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0jnenvr">
+          <text>[100000..2500000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_054rh02">
+          <text>&lt;=70</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1ih4fid">
+          <text>"Yes Bank"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1yd09if">
+        <inputEntry id="UnaryTests_14k3jti">
+          <text>["A+", "A", "B", "NH"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_01sgk75">
+          <text>&gt;=40000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_02ssbvj">
+          <text>[25..58]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0e762gg">
+          <text>&gt;=36</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_13y8pyj">
+          <text>["Owned", "Rented", "Others"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0vbhafz">
+          <text>[100000..2500000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1icjqv7">
+          <text>&lt;=60</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1e8xphc">
+          <text>"Axis Finance"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0unnero">
+        <inputEntry id="UnaryTests_02lnk4l">
+          <text>["A+", "A", "B", "C", "NH"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0q65n8c">
+          <text>&gt;=40000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1qwhpzq">
+          <text>[25..58]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0i6cw89">
+          <text>&gt;=6</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1ojhdx5">
+          <text>["Owned", "Rented", "Others"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1jdz8xu">
+          <text>[100000..2500000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1xqvccl">
+          <text>&lt;=65</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1hrkpbt">
+          <text>"Bajaj"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0sf5st2">
+        <inputEntry id="UnaryTests_046fpq6">
+          <text>["A+", "A", "B", "C", "NH"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_00w5aya">
+          <text>&gt;=20000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_13dzfgu">
+          <text>[23..58]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_05qfa3h">
+          <text>&gt;=24</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0ij3jth">
+          <text>["Owned", "Rented", "PG or Staying with Friends", "Others"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_005enlu">
+          <text>[100000..5000000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_116j1p7">
+          <text>&lt;=60</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0bvu04i">
+          <text>"Poonawala"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0px7e4a">
+        <inputEntry id="UnaryTests_0ywt007">
+          <text>["A+", "A", "B", "C", "NH"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0r68ug5">
+          <text>&gt;=25000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0zbyt2n">
+          <text>[23..53]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1lub0f4">
+          <text>&gt;=12</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_118rgju">
+          <text>["Owned", "Rented", "PG or Staying with Friends", "Others"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_18w0ryg">
+          <text>[100000..500000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0w8jxtf">
+          <text>&lt;=60</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0fr1fqa">
+          <text>"Fullerton"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0bhi3wk">
+        <inputEntry id="UnaryTests_0gaactk">
+          <text>["A+", "A", "B", "C", "NH"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1xhnstt">
+          <text>&gt;=25000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_01dgxso">
+          <text>[23..53]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_18x67g4">
+          <text>&gt;=12</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0ph6g52">
+          <text>["Owned", "Rented", "PG or Staying with Friends", "Others"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0p5o1gg">
+          <text>[50000..500000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1x2o4ia">
+          <text>&lt;=60</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0tyvhwm">
+          <text>"Cholamandalam"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1pk6jxn">
+        <inputEntry id="UnaryTests_0535jif">
+          <text>["A+", "A", "B", "C", "NH"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1bgvf3q">
+          <text>&gt;=20000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_15c9pxt">
+          <text>[21..60]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_03iycrj">
+          <text>&gt;=6</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0iu98qq">
+          <text>["Owned", "Rented", "PG or Staying with Friends", "Others"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0nqp387">
+          <text>[100000..3500000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_03w487c">
+          <text>&lt;=65</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1d3elcu">
+          <text>"TATA Capital"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0dhye2t">
+        <inputEntry id="UnaryTests_12qbhxp">
+          <text>["A+", "A", "B", "C", "D", "NH"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0xdklui">
+          <text>&gt;=20000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0gxndjn">
+          <text>[23..58]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1d9vixp">
+          <text>&gt;=6</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0l1jphv">
+          <text>["Owned", "Rented", "PG or Staying with Friends", "Others"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1pveh1g">
+          <text>[100000..1000000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1lknfi9">
+          <text>&lt;=60</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0p1xcug">
+          <text>"Finnable"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0o80oc4">
+        <inputEntry id="UnaryTests_08bph0r">
+          <text>["A+", "A", "B", "C", "D", "NH"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0xcj79h">
+          <text>&gt;=15000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0vs4b7l">
+          <text>[23..58]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_144wfx9">
+          <text>&gt;=6</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0tifjyj">
+          <text>["Owned", "Rented",  "PG or Staying with Friends", "Others"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1cg1c1m">
+          <text>[100000..500000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1c3rbzo">
+          <text>&lt;=60</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0mxdax0">
+          <text>"Loan Tap"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1dauiaw">
+        <inputEntry id="UnaryTests_0zeabbj">
+          <text>["A+", "A", "B", "C", "D", "NH"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0stygxu">
+          <text>&gt;=15000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1ab695o">
+          <text>[21..56]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1h4u23r">
+          <text>&gt;=6</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1j6as33">
+          <text>["Owned", "Rented", "PG or Staying with Friends", "Others"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_07rmuc1">
+          <text>[100000..1000000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_13yhlnw">
+          <text>&lt;=65</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0yohfc4">
+          <text>"Incred"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1bhtgok">
+        <inputEntry id="UnaryTests_011s4a6">
+          <text>["A+", "A", "B", "C", "D", "NH"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0dc54vv">
+          <text>&gt;=25000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1szu1z0">
+          <text>[23..58]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0b9veaq">
+          <text>&gt;=6</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_06r12np">
+          <text>["Owned", "Rented", "PG or Staying with Friends", "Others"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_090qodm">
+          <text>[50000..500000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_18ppg1o">
+          <text>&lt;=60</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0rje1ja">
+          <text>"Faircant"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0vhslar">
+        <inputEntry id="UnaryTests_04ievrk">
+          <text>["A+", "A", "B", "C", "D", "NH"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0csb0xx">
+          <text>&gt;=20000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_120h2h5">
+          <text>[22..55]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0rs7o8j">
+          <text>&gt;=12</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1jc6l9o">
+          <text>["Owned", "Rented", "PG or Staying with Friends", "Others"]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0nvect1">
+          <text>[5000..1000000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_098b0a9">
+          <text>&lt;=70</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0k7p3r9">
+          <text>"Paysense"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram>
+      <dmndi:DMNShape dmnElementRef="PL_Decisioning">
+        <dc:Bounds height="80" width="180" x="160" y="80" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>
