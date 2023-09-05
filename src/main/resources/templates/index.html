@@ -8,37 +8,37 @@
 		//Giving validations to input variables
 		document.addEventListener('DOMContentLoaded', function () {
 			document.getElementById('takeHomeSalaryMonthly').addEventListener('input', function () {
-				this.value = this.value.replace(/\D/g, ''); // Remove non-digit characters
+				this.value = this.value.replace(/\D/g, '');
 				if (this.value.length > 7) {
-					this.value = this.value.slice(0, 7); // Limit input to 7 digits
+					this.value = this.value.slice(0, 7);
 				}
 			});
 
 			document.getElementById('experienceYears').addEventListener('input', function () {
-				this.value = this.value.replace(/\D/g, ''); // Remove non-digit characters
+				this.value = this.value.replace(/\D/g, '');
 				if (this.value > 40) {
-					this.value = '40'; // Limit experience years to 40
+					this.value = '40';
 				}
 			});
 
 			document.getElementById('experienceMonths').addEventListener('input', function () {
-				this.value = this.value.replace(/\D/g, ''); // Remove non-digit characters
+				this.value = this.value.replace(/\D/g, '');
 				if (this.value > 11) {
-					this.value = '11'; // Limit experience months to 11
+					this.value = '11';
 				}
 			});
 
 			document.getElementById('loanAmount').addEventListener('input', function () {
-				this.value = this.value.replace(/\D/g, ''); // Remove non-digit characters
+				this.value = this.value.replace(/\D/g, '');
 				if (this.value.length > 7) {
-					this.value = this.value.slice(0, 7); // Limit input to 7 digits
+					this.value = this.value.slice(0, 7);
 				}
 			});
 
 			document.getElementById('foir').addEventListener('input', function () {
-				this.value = this.value.replace(/\D/g, ''); // Remove non-digit characters
+				this.value = this.value.replace(/\D/g, '');
 				if (this.value.length > 2) {
-					this.value = this.value.slice(0, 2); // Limit input to 2 digits
+					this.value = this.value.slice(0, 2);
 				}
 			});
 			//Restricting the user not to give date of birth greater than current date
@@ -100,20 +100,18 @@
 			});
 
 			if (response.status === 200) {
-				const banks = await response.json(); // Assuming the response is an array of banks
+				const banks = await response.json();
 				const bankContainer = document.getElementById('decisionResult');
 				banks.forEach((bank) => {
 					const bankDiv = document.createElement('div');
-					bankDiv.className = 'bank-name'; // Apply any desired CSS classes
-					// Set the content of the bank div
-					bankDiv.innerText = bank; // Modify this line to format the bank information as needed
-					bankContainer.appendChild(bankDiv); // Append the bank div to the container
+					bankDiv.className = 'bank-name';
+					bankDiv.innerText = bank;
+					bankContainer.appendChild(bankDiv);
 				});
 			}else if(response.status === 204){
 				alert("According to our BRE no Bank is providing loan for your provided data");
 			}
 			else if (response.status === 400) {
-				// Validation error case: handle error response
 				try {
 					const errorData = await response.json();
 					displayValidationErrors(errorData);
