@@ -75,8 +75,8 @@
         </dependency>
 
         <dependency>
-        <groupId>org.camunda.bpm</groupId>
-        <artifactId>camunda-engine-plugin-spin</artifactId>
+            <groupId>org.camunda.bpm</groupId>
+            <artifactId>camunda-engine-plugin-spin</artifactId>
         </dependency>
 
         <dependency>
@@ -114,6 +114,14 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>

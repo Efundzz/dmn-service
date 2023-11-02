@@ -1,28 +1,501 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>DMN Service</title>
+    <link rel="shortcut icon" href="https://www.efundzz.com/favicon.ico">
     <script>
+        //Giving validations to input variables
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('takeHomeSalaryMonthly').addEventListener('input', function () {
+                this.value = this.value.replace(/\D/g, '');
+                if (this.value.length > 7) {
+                    this.value = this.value.slice(0, 7);
+                }
+            });
+
+            document.getElementById('experienceYears').addEventListener('input', function () {
+                this.value = this.value.replace(/\D/g, '');
+                if (this.value > 40) {
+                    this.value = '40';
+                }
+            });
+
+            document.getElementById('experienceMonths').addEventListener('input', function () {
+                this.value = this.value.replace(/\D/g, '');
+                if (this.value > 11) {
+                    this.value = '11';
+                }
+            });
+
+            document.getElementById('jobStability').addEventListener('input', function () {
+                this.value = this.value.replace(/\D/g, ''); // Remove non-digit characters
+                if (this.value > 120) {
+                    this.value = '120'; // Limit experience months to 11
+                }
+            });
+
+            document.getElementById('loanAmount').addEventListener('input', function () {
+                this.value = this.value.replace(/\D/g, '');
+                if (this.value.length > 8) {
+                    this.value = this.value.slice(0, 8);
+                }
+            });
+
+            document.getElementById('emi').addEventListener('input', function () {
+                this.value = this.value.replace(/\D/g, '');
+                if (this.value.length > 7) {
+                    this.value = this.value.slice(0, 7);
+                }
+            });
+            //Restricting the user not to give date of birth greater than current date
+            document.getElementById('dateOfBirth').max = formatDateInput(new Date());
+            document.getElementById('dateOfBirth').addEventListener('change', function () {
+                const selectedDate = new Date(this.value);
+                const currentDate = new Date();
+                if (selectedDate > currentDate) {
+                    alert("Please select a date not in the future.");
+                    this.value = '';
+                }
+            });
+            //restricting the user not give year more than current year
+            document.getElementById('dateOfBirth').addEventListener('input', function () {
+                const currentYear = new Date().getFullYear();
+                const inputYear = new Date(this.value).getFullYear();
+                if (inputYear > currentYear) {
+                    this.value = currentYear + this.value.slice(4);
+                }
+            });
+
+        });
+        document.addEventListener('DOMContentLoaded', function(){
+            const infoIcon = document.getElementById('creditInfoIcon');
+            const infoPopup = document.getElementById('creditInfoPopup');
+            infoIcon.addEventListener('mouseover', () => {
+                infoPopup.style.display = 'block';
+            });
+            infoIcon.addEventListener('mouseout', () => {
+                infoPopup.style.display = 'none';
+            });
+        });
+        function closeCreditInfoPopup() {
+            const infoPopup = document.getElementById('creditInfoPopup');
+            infoPopup.style.display = 'none';
+            }
         async function evaluateDecision() {
-            const inputVariables = document.getElementById('inputVariables').value;
+            document.getElementById('decisionResult').innerText = '';
+            // Checking for any required fields are empty
+            const requiredFields = ['creditScore', 'takeHomeSalaryMonthly', 'dateOfBirth', 'experienceYears', 'experienceMonths', 'jobStability', 'residentType', 'loanAmount', 'emi', 'companyCategory', 'salaryCreditType', 'ownHouse'];
+            let allFieldsFilled = true;
+
+            for (const field of requiredFields) {
+                const fieldValue = document.getElementById(field).value;
+                if (!fieldValue) {
+                    allFieldsFilled = false;
+                    break;
+                }
+            }
+
+            if (!allFieldsFilled) {
+                alert("Please fill in all required fields.");
+                return;
+            }
+            const inputVariables = {
+                creditScore: document.getElementById('creditScore').value,
+                takeHomeSalaryMonthly: document.getElementById('takeHomeSalaryMonthly').value,
+                dateOfBirth: formatDateInput(document.getElementById('dateOfBirth').value),
+                experienceYears: document.getElementById('experienceYears').value,
+                experienceMonths: document.getElementById('experienceMonths').value,
+                jobStability: document.getElementById('jobStability').value,
+                residentType: document.getElementById('residentType').value,
+                loanAmount: document.getElementById('loanAmount').value,
+                emi: document.getElementById('emi').value,
+                companyCategory: document.getElementById('companyCategory').value,
+                salaryCreditType: document.getElementById('salaryCreditType').value,
+                ownHouse: document.getElementById('ownHouse').value,
+            };
+
             const response = await fetch('/evaluate', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'applicatio vcg n/json'
+                    'Content-Type': 'application/json'
                 },
-                body: inputVariables
+                body: JSON.stringify(inputVariables)
             });
-            document.getElementById('decisionResult').innerText = await response.text();
+
+            if (response.status === 200) {
+                const banks = await response.json();
+                const bankContainer = document.getElementById('decisionResult');
+                banks.forEach((bank) => {
+                    const bankDiv = document.createElement('div');
+                    bankDiv.className = 'bank-name';
+                    bankDiv.innerText = bank.entity;
+                    const detailsDiv = document.createElement('div');
+                    detailsDiv.className = 'bank-details';
+                    detailsDiv.innerHTML = `
+                    <p>Proposed EMI: ${bank.proposedEmi}/-</p>
+                    <p>ROI: ${bank.roi}%</p>
+                    <p>Tenure: ${bank.tenure} months</p>
+                    <p>Probability: ${bank.probabilityPercentage}%</p>
+                    `;
+                    bankDiv.appendChild(detailsDiv);
+                    bankContainer.appendChild(bankDiv);
+                });
+            }else if(response.status === 204){
+                alert("According to our BRE no Bank is providing loan for your provided data");
+            }
+            else if (response.status === 400) {
+                try {
+                    const errorData = await response.json();
+                    displayValidationErrors(errorData);
+                } catch (error) {
+                    alert("An error occured while processing your request");
+                }
+            } else {
+                alert("'Currently we are unable to provide the eligible banks for the internal server issue.");
+            }
+        }
+        function displayValidationErrors(errorData) {
+            let errorMessage = "According to our BRE:\n";
+            for (const field in errorData) {
+                if (errorData.hasOwnProperty(field)) {
+                    errorMessage += `${field}: ${errorData[field]}\n`;
+                }
+            }
+            alert(errorMessage);
+        }
+        //converting the date of birth format to yyyy-MM-dd as required to send it to the backend
+        function formatDateInput(inputDate) {
+            const date = new Date(inputDate);
+            const year = date.getFullYear();
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            return `${year}-${month}-${day}`;
         }
     </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgb(255, 245, 238);
+            margin: 0px;
+            padding: 14px 0px;
+        }
+
+        .wrp {
+            padding: 0px;
+            margin: 0px;
+        }
+
+        .container {
+            width:90%;
+
+            margin: 0px auto;
+            padding:0px 10px 10px;
+            background-color: #fff;
+            border: 1px solid rgb(255, 128, 0);
+            border-radius: 6px;
+        }
+        .left-div{
+            float:left ;
+            width: 45%;
+        }
+
+        .right-div{
+            float:right ;
+            width: 45%;
+        }
+
+        h1 {
+            color: rgb(255, 128, 0);
+            text-align: center;
+            margin-bottom: 20px;
+                padding: 6px;
+    margin: 6px;
+    font-size: 20px;
+        }
+
+        h2{
+            font-size: 16px;
+    color: #012dbe;
+        }
+
+        .form-div {
+            padding:0px 6px;
+            margin: 0px;
+            font-size: 12px;
+
+        }
+
+        .form-left {
+            padding: 6px;
+            float: left;
+            width: 46%;
+        }
+
+        .form-right {
+            padding: 6px;
+            float: left;
+            width: 46%;
+        }
+
+        .cls {
+            clear: both
+        }
+
+        .button {
+            background: rgb(255, 128, 0);
+            padding:4px 10px;
+            border-radius: 4px;
+            border: 1px solid red;
+            color: #fff;
+            margin: 2px;
+            cursor: pointer;
+        }
+        .button:hover {
+                background: rgb(255 178 100);
+                }
+        .bank-name {
+            float: left;
+            padding: 6px;
+            margin: 8px;
+            background-color: rgb(255, 245, 238);
+            border: 1px solid red;
+            border-radius: 5px;
+            font-size: 12px;
+
+        }
+        .bank-entity{
+            color:coral;
+
+        }
+        input[type="text"], select, input[type="date"]
+        {
+            border: 1px solid #ccc;
+            border-radius: 4px ;
+            padding: 4px 8px ;
+            font-size: 12px ;
+            text-transform:capitalize;
+         }
+    .info-popup {
+    display: none;
+    position: absolute;
+    top: 30%;
+    bottom: 36%;
+    left: 41.5%;
+    right: 40%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(255, 245, 238);
+    padding: 10px;
+    border: 1px solid rgb(255, 128, 64);
+    border-radius: 8px ;
+    box-shadow: 0 0 5px rgb(255, 128, 0);
+    z-index: 1000;
+    font-size: 12px;
+    }
+    .info-icon{
+        color: white;
+        padding: 1px 1px 1px 1px;
+        background-color: darkorange;
+        border-radius: 50%;
+        border: 1px solid rgb(255, 128, 64);
+        font-size: 14px;
+        font-family: Georgia, 'Times New Roman', Times, serif;
+    }
+
+    h4{
+        font-size: 11px;
+        color:  #012dbe;
+    }
+    .credit{
+        font-size: 10px;
+    }
+    .ul{
+        font-size: 10px;
+    }
+    </style>
 </head>
+
 <body>
-<h1>DMN Service</h1>
-<label for="inputVariables">Input Variables (JSON):</label><br>
-<textarea id="inputVariables" rows="4" cols="50"></textarea><br><br>
-<button onclick="evaluateDecision()">Submit</button>
-<br><br>
-<h2>Decision Result:</h2>
-<p id="decisionResult"></p>
+<div class="container">
+    <h1>PL BRE Utility</h1>
+
+
+
+    <div class="left-div">
+        <form>
+            <div class="form-div">
+                <div class="form-left">
+                    Select your Credit Grade:
+                </div>
+                <div class="form-right">
+                    <select id="creditScore">
+                        <option value="">Select</option>
+                        <option value="A+">A+</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                        <option value="G">G</option>
+                        <option value="NH">NH</option>
+                    </select>
+                    <span class="info-icon" id="creditInfoIcon">i</div>
+            </div>
+
+            <!-- Informational Popup -->
+            <div id="creditInfoPopup" class="info-popup">
+                <h4>Credit Grade Information</h4>
+                <p class="credit" id="creditInfoText">According to our BRE, credit grade ranges are:</p>
+                <ul class="ul" id="creditGradeRanges">
+                    <li>A+: 850-900</li>
+                    <li>A:  800-850</li>
+                    <li>B:  750-800</li>
+                    <li>C:  700-750</li>
+                    <li>D:  650-700</li>
+                    <li>E:  600-650</li>
+                    <li>F:  550-600</li>
+                    <li>G:  500-550</li>
+                    <li>NH: 0/-1</li>
+                </ul>
+            </div>
+
+            <div class="form-div">
+                <div class="form-left">
+                    Monthly Salary:
+                </div>
+                <div class="form-right">
+                    <input type="text" id="takeHomeSalaryMonthly">
+                </div>
+                <div class="cls"></div>
+            </div>
+            <div class="form-div">
+                <div class="form-left">
+                    Date Of Birth:
+                </div>
+                <div class="form-right">
+                    <input type="date" id="dateOfBirth" max="" />
+                </div>
+                <div class="cls"></div>
+            </div>
+            <div class="form-div">
+                <div class="form-left">
+                    Experience Years:
+                </div>
+                <div class="form-right">
+                    <input type="text" id="experienceYears" placeholder="years">
+                </div>
+                <div class="cls"></div>
+            </div>
+            <div class="form-div">
+                <div class="form-left">
+                    Months:
+                </div>
+                <div class="form-right">
+                    <input type="text" id="experienceMonths" placeholder="months">
+                </div>
+                <div class="cls"></div>
+            </div>
+            <div class="form-div">
+                <div class="form-left">
+                    Current Job Stability(Months):
+                </div>
+                <div class="form-right">
+                    <input type="text" id="jobStability" placeholder="months">
+                </div>
+                <div class="cls"></div>
+            </div>
+            <div class="form-div">
+                <div class="form-left">
+                    Residency Type:
+                </div>
+                <div class="form-right">
+                    <select id="residentType">
+                        <option value="">Select</option>
+                        <option value="Owned">Owned</option>
+                        <option value="Rented">Rented</option>
+                        <option value="PG">PG</option>
+                        <option value="Company Accommodation">Company Accommodation</option>
+                        <option value="Staying with Friends">Staying with Friends</option>
+                    </select>
+                </div>
+                <div class="cls"></div>
+            </div>
+            <div class="form-div">
+                <div class="form-left">
+                    Loan Amount:
+                </div>
+                <div class="form-right">
+                    <input type="text" id="loanAmount">
+                </div>
+                <div class="cls"></div>
+            </div>
+            <div class="form-div">
+                <div class="form-left">
+                    EMI Paying Currently:
+                </div>
+                <div class="form-right">
+                    <input type="text" id="emi">
+                </div>
+                <div class="cls"></div>
+            </div>
+            <div class="form-div">
+                <div class="form-left">
+                    Company Category:
+                </div>
+                <div class="form-right">
+                    <select id="companyCategory">
+                        <option value="">Select</option>
+                        <option value="SA">SA</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                        <option value="O">O</option>
+                    </select>
+                </div>
+                <div class="cls"></div>
+            </div>
+            <div class="form-div">
+                <div class="form-left">
+                    Salary Credit in Bank Account:
+                </div>
+                <div class="form-right">
+                    <select id="salaryCreditType">
+                        <option value="">Select</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+                <div class="cls"></div>
+            </div>
+            <div class="form-div">
+                <div class="form-left">
+                    Own House Anywhere:
+                </div>
+                <div class="form-right">
+                    <select id="ownHouse">
+                        <option value="">Select</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+                <div class="cls"></div>
+            </div>
+        </form>
+        <button class="button" onclick="evaluateDecision()">Submit</button>
+    </div>
+
+    <div class="right-div">
+
+        <h2>Eligible Banks:</h2>
+        <p id="decisionResult"></p>
+    </div>
+    <div class="cls"></div>
+
+
+</div>
 </body>
+
 </html>
