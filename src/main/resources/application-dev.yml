@@ -3,23 +3,20 @@ spring:
   application:
     name: dmn-service
   datasource:
-    url: jdbc:postgresql://localhost:5432/camunda
+    url: jdbc:postgresql://localhost:5432/dmn
     driver-class-name: org.postgresql.Driver
-    username: postgres
-    password: root
+    username: dmn_user
+    password: Dmn
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQL9Dialect
     hibernate:
       ddl-auto: update
     show-sql: true
-    properties:
-      hibernate:
-        jdbc:
-          time_zone: UTC
 camunda:
   bpm:
     admin-user:
       id: demo
       password: demo
+
 server:
   port: 8080

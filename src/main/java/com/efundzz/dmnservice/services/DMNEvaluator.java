@@ -1,10 +1,11 @@
 package com.efundzz.dmnservice.services;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
+import com.efundzz.dmnservice.dto.CRMBreFormRequestDTO;
+import com.efundzz.dmnservice.dto.DMNInputDTO;
+import com.efundzz.dmnservice.dto.DecisionResultDTO;
+import com.efundzz.dmnservice.entity.BankData;
+import com.efundzz.dmnservice.repository.BankDataRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.camunda.bpm.dmn.engine.DmnDecisionRuleResult;
 import org.camunda.bpm.dmn.engine.DmnDecisionTableResult;
 import org.camunda.bpm.engine.DecisionService;
@@ -13,19 +14,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.efundzz.dmnservice.dto.CRMBreFormRequestDTO;
-import com.efundzz.dmnservice.dto.DMNInputDTO;
-import com.efundzz.dmnservice.dto.DecisionResultDTO;
-import com.efundzz.dmnservice.entity.BankData;
-import com.efundzz.dmnservice.repository.BankDataRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Component
 public class DMNEvaluator {
     private static final Logger logger = LoggerFactory.getLogger(DMNEvaluator.class);
 
+    private final DecisionService decisionService;
     @Autowired
-    private DecisionService decisionService;
+    public DMNEvaluator(DecisionService decisionService) {
+        this.decisionService = decisionService;
+    }
+
     @Autowired
     private BankDataRepository bankDataRepository;
     @Autowired
@@ -33,9 +36,7 @@ public class DMNEvaluator {
 
     @SuppressWarnings("unchecked")
     public List<Map<String, Object>> evaluateDecision(String decisionKey, CRMBreFormRequestDTO inputVariables) {
-        logger.debug("Start evaluateDecision method");
         DMNInputDTO dmnInputDTO = createDMNEvaluationDTO(inputVariables);
-        logger.debug("inputVariables before evaluation: {}", dmnInputDTO);
         Map<String, Object> inputVariablesMap = objectMapper.convertValue(dmnInputDTO, Map.class);
         DmnDecisionTableResult result = decisionService.evaluateDecisionTableByKey(decisionKey, (Map<String, Object>) inputVariablesMap);
         List<Map<String, Object>> outputList = new ArrayList<>();
@@ -47,14 +48,10 @@ public class DMNEvaluator {
             double tenure = getTenureFromDatabase(bankName, companyCategory);
             decisionDTO.setRoi(roi);
             decisionDTO.setTenure(tenure);
-            double proposedEmi = calculateEmi(inputVariables.getLoanAmount(), roi, tenure);
+            int proposedEmi = (int) calculateEmi(inputVariables.getLoanAmount(), roi, tenure);
             decisionDTO.setProposedEmi(proposedEmi);
-            if (decisionDTO != null) {
-                outputList.add(decisionDTO.toMap());
-            }
+            outputList.add(decisionDTO.toMap());
         }
-        logger.debug("Decision evaluation result: {}", outputList);
-        logger.debug("End evaluateDecision method");
         return outputList;
     }
     private DecisionResultDTO convertToDecisionResultDTO(DmnDecisionRuleResult ruleResult) {
@@ -78,9 +75,8 @@ public class DMNEvaluator {
         return dmnInputDTO;
     }
     private double calculateEmi(double loanAmount, double roi, double tenure) {
-        double emi = (loanAmount * (roi / (12 * 100))
+        return (loanAmount * (roi / (12 * 100))
                 * Math.pow((1 + roi / (12 * 100)), tenure)) / (Math.pow((1 + roi / (12 * 100)), tenure) - 1);
-        return emi;
     }
 
     private double getTenureFromDatabase(String bankName, String companyCategory) {
