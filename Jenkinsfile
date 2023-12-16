@@ -1,7 +1,7 @@
 pipeline {
   agent any
   environment{
-        PATH ="/usr/share/man/man1/mvn.1.gz:$PATH"
+        PATH ="/usr/share/maven:$PATH"
   }
     stages {
         stage('Checkout') {
